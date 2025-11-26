@@ -1,0 +1,2 @@
+Invoking command in '/home/user/ros2_ws/src/offboard_rl/build/offboard_rl': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/user/ros2_ws/src/offboard_rl -DCMAKE_INSTALL_PREFIX=/home/user/ros2_ws/src/offboard_rl/install/offboard_rl
+Invoked command in '/home/user/ros2_ws/src/offboard_rl/build/offboard_rl' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/user/ros2_ws/src/offboard_rl -DCMAKE_INSTALL_PREFIX=/home/user/ros2_ws/src/offboard_rl/install/offboard_rl

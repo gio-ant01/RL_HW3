@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_geometries>
+    <geometry id="propellerGeom" name="propeller">
+      <mesh>
+        <source id="positions">
+          <float_array id="positions-array" count="36">
+            0.005  0.00   0.0
+            0.078  0.012  0.0
+            0.078 -0.012  0.0
+            0.005  0.00   0.0
+            0.078 -0.012  0.0
+            0.078  0.012  0.0
+            -0.005  0.00   0.0
+            -0.078  0.012  0.0
+            -0.078 -0.012  0.0
+            -0.005  0.00   0.0
+            -0.078 -0.012  0.0
+            -0.078  0.012  0.0
+          </float_array>
+          <technique_common>
+            <accessor source="#positions-array" count="12" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="verts">
+          <input semantic="POSITION" source="#positions"/>
+        </vertices>
+        <triangles count="4">
+          <input semantic="VERTEX" source="#verts" offset="0"/>
+          <p>
+            0 1 2
+            3 4 5
+            6 7 8
+            9 10 11
+          </p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="propeller" name="propeller">
+        <instance_geometry url="#propellerGeom"/>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

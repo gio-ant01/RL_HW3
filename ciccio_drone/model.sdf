@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='ciccio_drone'>
+    <pose>0 0 0.24 0 0 0</pose>
+    <self_collide>false</self_collide>
+    <static>false</static>
+
+    <!-- Link principale -->
+    <link name="base_link">
+      <inertial>
+        <mass>2.35</mass>
+        <inertia>
+          <ixx>0.015</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.015</iyy>
+          <iyz>0</iyz>
+          <izz>0.025</izz>
+        </inertia>
+      </inertial>
+
+      <!-- CUSTOM LANDING SUPPORT - V-shaped legs with horizontal bars -->
+      <!-- Two angled legs on the FRONT and REAR sides,
+          connected by four horizontal crossbars (left/right).
+          All components are cylindrical for a realistic look. -->
+      
+      <!-- FRONT ANGLED LEG -->
+      <!-- Starts from body bottom, angled outward to the front -->
+      <visual name="landing_leg_front_visual">
+        <pose>0 0.045 -0.035 0.349 0 0</pose> <!-- 20° tilt forward (0.349 rad) -->
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.10</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_leg_front">
+        <pose>0 0.045 -0.035 0.349 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.10</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- REAR ANGLED LEG -->
+      <!-- Starts from body bottom, angled outward to the rear -->
+      <visual name="landing_leg_rear_visual">
+        <pose>0 -0.045 -0.035 -0.349 0 0</pose> <!-- -20° tilt backward -->
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.10</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_leg_rear">
+        <pose>0 -0.045 -0.035 -0.349 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.10</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- LEFT HORIZONTAL CROSSBAR (FRONT) -->
+      <!-- Attached at the front leg endpoint -->
+      <visual name="landing_crossbar_left_front_visual">
+        <pose>-0.085 0.062 -0.082 0 1.5708 0</pose> <!-- Rotated 90° around Y to be horizontal along X -->
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_crossbar_left_front">
+        <pose>-0.085 0.062 -0.082 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- RIGHT HORIZONTAL CROSSBAR (FRONT) -->
+      <!-- Attached at the front leg endpoint -->
+      <visual name="landing_crossbar_right_front_visual">
+        <pose>0.085 0.062 -0.082 0 1.5708 0</pose> <!-- Rotated 90° around Y to be horizontal along X -->
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_crossbar_right_front">
+        <pose>0.085 0.062 -0.082 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- LEFT HORIZONTAL CROSSBAR (REAR) -->
+      <!-- Attached at the rear leg endpoint -->
+      <visual name="landing_crossbar_left_rear_visual">
+        <pose>-0.085 -0.062 -0.082 0 1.5708 0</pose> <!-- Rotated 90° around Y to be horizontal along X -->
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_crossbar_left_rear">
+        <pose>-0.085 -0.062 -0.082 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- RIGHT HORIZONTAL CROSSBAR (REAR) -->
+      <!-- Attached at the rear leg endpoint -->
+      <visual name="landing_crossbar_right_rear_visual">
+        <pose>0.085 -0.062 -0.082 0 1.5708 0</pose> <!-- Rotated 90° around Y to be horizontal along X -->
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <collision name="landing_crossbar_right_rear">
+        <pose>0.085 -0.062 -0.082 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.17</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- Corpo centrale -->
+      <visual name="body_visual">
+        <pose>0 0 .025 0 0 3.141592654</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.06</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Collision central body -->
+      <collision name="body_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.10</radius>
+            <length>0.08</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <!-- Bracci (6 bracci, colori diversi per identificazione) -->
+      <!-- Braccio 0: 0° - ROSSO -->
+      <visual name="arm0_visual">
+        <pose>0.14 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm0_collision">
+        <pose>0.14 0 0 0 0 0</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- Braccio 1: 60° - GIALLO -->
+      <visual name="arm1_visual">
+        <pose>0.07 0.121 0 0 0 1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 0 1</ambient>
+          <diffuse>1 1 0 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm1_collision">
+        <pose>0.07 0.121 0 0 0 1.0472</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- Braccio 2: 120° - VERDE -->
+      <visual name="arm2_visual">
+        <pose>-0.07 0.121 0 0 0 2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm2_collision">
+        <pose>-0.07 0.121 0 0 0 2.0944</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- Braccio 3: 180° - CIANO -->
+      <visual name="arm3_visual">
+        <pose>-0.14 0 0 0 0 3.14159</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 1 1 1</ambient>
+          <diffuse>0 1 1 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm3_collision">
+        <pose>-0.14 0 0 0 0 3.14159</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- Braccio 4: 240° - BLU -->
+      <visual name="arm4_visual">
+        <pose>-0.07 -0.121 0 0 0 -2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm4_collision">
+        <pose>-0.07 -0.121 0 0 0 -2.0944</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- Braccio 5: 300° - MAGENTA -->
+      <visual name="arm5_visual">
+        <pose>0.07 -0.121 0 0 0 -1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+        </material>
+      </visual>
+      <collision name="arm5_collision">
+        <pose>0.07 -0.121 0 0 0 -1.0472</pose>
+        <geometry><box><size>0.28 0.02 0.01</size></box></geometry>
+      </collision>
+
+      <!-- ========================================== -->
+      <!-- COLLEGAMENTI BRACCI-ROTORI                 -->
+      <!-- Small vertical links connecting arm tips   -->
+      <!-- to rotor bases (box geometry)              -->
+      <!-- ========================================== -->
+
+      <!-- Link 0: Arm tip → Rotor 0 -->
+      <visual name="arm_rotor_link_0_visual">
+        <pose>0.28 0.0 0.01 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_0_collision">
+        <pose>0.28 0.0 0.01 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Link 1: Arm tip → Rotor 1 -->
+      <visual name="arm_rotor_link_1_visual">
+        <pose>0.14 0.242 0.01 0 0 1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_1_collision">
+        <pose>0.14 0.242 0.01 0 0 1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Link 2: Arm tip → Rotor 2 -->
+      <visual name="arm_rotor_link_2_visual">
+        <pose>-0.14 0.242 0.01 0 0 2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_2_collision">
+        <pose>-0.14 0.242 0.01 0 0 2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Link 3: Arm tip → Rotor 3 -->
+      <visual name="arm_rotor_link_3_visual">
+        <pose>-0.28 0.0 0.01 0 0 3.14159</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_3_collision">
+        <pose>-0.28 0.0 0.01 0 0 3.14159</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Link 4: Arm tip → Rotor 4 -->
+      <visual name="arm_rotor_link_4_visual">
+        <pose>-0.14 -0.242 0.01 0 0 -2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_4_collision">
+        <pose>-0.14 -0.242 0.01 0 0 -2.0944</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Link 5: Arm tip → Rotor 5 -->
+      <visual name="arm_rotor_link_5_visual">
+        <pose>0.14 -0.242 0.01 0 0 -1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="arm_rotor_link_5_collision">
+        <pose>0.14 -0.242 0.01 0 0 -1.0472</pose>
+        <geometry>
+          <box>
+            <size>0.015 0.015 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+     
+
+      <!-- SENSORI -->
+      <sensor name="imu_sensor" type="imu">
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+        <imu>
+          <angular_velocity>
+            <x><noise type="gaussian"><mean>0.0</mean><stddev>0.0008726646</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0.0</mean><stddev>0.0008726646</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0.0</mean><stddev>0.0008726646</stddev></noise></z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x><noise type="gaussian"><mean>0.0</mean><stddev>0.00637</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0.0</mean><stddev>0.00637</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0.0</mean><stddev>0.00686</stddev></noise></z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure><noise type="gaussian"><mean>0</mean><stddev>3</stddev></noise></pressure>
+        </air_pressure>
+      </sensor>
+
+      <sensor name="magnetometer_sensor" type="magnetometer">
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <magnetometer>
+          <x><noise type="gaussian"><stddev>0.0001</stddev></noise></x>
+          <y><noise type="gaussian"><stddev>0.0001</stddev></noise></y>
+          <z><noise type="gaussian"><stddev>0.0001</stddev></noise></z>
+        </magnetometer>
+      </sensor>
+
+      <sensor name="navsat_sensor" type="navsat">
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+      </sensor>
+    </link>
+
+    <!-- ========================================== -->
+    <!-- ROTORI (posizioni scalate × 0.28)          -->
+    <!-- Airframe: normalizzato (R=1.0)             -->
+    <!-- SDF: fisico (R=0.28m)                      -->
+    <!-- ========================================== -->
+
+    <!-- Rotore 0: (1.0, 0.0) → (0.28, 0.0) - CCW -->
+    <link name="rotor_0">
+      <pose>0.28 0.0 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_0_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_0_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_0_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_0</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Rotore 1: (0.5, 0.866) → (0.14, 0.242) - CW -->
+    <link name="rotor_1">
+      <pose>0.14 0.242 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_1_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_1_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_1_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Rotore 2: (-0.5, 0.866) → (-0.14, 0.242) - CCW -->
+    <link name="rotor_2">
+      <pose>-0.14 0.242 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_2_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_2_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_2_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Rotore 3: (-1.0, 0.0) → (-0.28, 0.0) - CW -->
+    <link name="rotor_3">
+      <pose>-0.28 0.0 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_3_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_3_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_3_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_3</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Rotore 4: (-0.5, -0.866) → (-0.14, -0.242) - CCW -->
+    <link name="rotor_4">
+      <pose>-0.14 -0.242 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_4_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_4_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_4_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_4</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Rotore 5: (0.5, -0.866) → (0.14, -0.242) - CW -->
+    <link name="rotor_5">
+      <pose>0.14 -0.242 0.02 0 0 0</pose>
+      <inertial>
+        <mass>0.016076923076923075</mass>
+        <inertia>
+          <ixx>3.8464910483993325e-07</ixx>
+          <iyy>2.6115851691700804e-05</iyy>
+          <izz>2.649858234714004e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_5_visual">
+        <pose>0 0 0.003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ciccio_drone/meshes/propeller.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_5_collision">
+        <geometry>
+          <cylinder>
+            <radius>0.08</radius>
+            <length>0.002</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="rotor_5_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_5</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+      </axis>
+    </joint>
+
+      
+
+    <!-- ========================================== -->
+    <!-- PLUGIN MOTORI                              -->
+    <!-- ========================================== -->
+
+    <!-- M0 - CCW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_0_joint</jointName>
+      <linkName>rotor_0</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>0</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- M1 - CW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_1_joint</jointName>
+      <linkName>rotor_1</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>1</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- M2 - CCW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_2_joint</jointName>
+      <linkName>rotor_2</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>2</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- M3 - CW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_3_joint</jointName>
+      <linkName>rotor_3</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>3</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- M4 - CCW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_4_joint</jointName>
+      <linkName>rotor_4</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>4</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- M5 - CW -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" 
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_5_joint</jointName>
+      <linkName>rotor_5</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>5</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+  </model>
+</sdf>
