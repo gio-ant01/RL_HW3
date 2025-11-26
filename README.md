@@ -1,34 +1,23 @@
 # RL_HW3
+
 This is the repository for RoboticsLab HW3 - PX4 Ciccio Drone Autonomous Flight Control System.
 
-Link to the playlist containing our demo videos on Youtube: 
-https://youtube.com/playlist?list=[YOUR_PLAYLIST_ID]
+Link to the playlist containing our demo videos on Youtube:
+https://www.youtube.com/playlist?list=PLIDEFmFRzNxxQFPCKc3mNf2lnarBoGnwy
 
 ## 🔨 Installation
 
 ### Prerequisites
+
 - Docker installed and configured
 - PX4-Autopilot repository cloned locally
 - ROS 2 Humble installed
-
-### Clone Required Repositories
-```bash
-cd ~/ros2_ws/src
-# Clone your project repositories here
-```
-
-### Install Required Packages
-```bash
-# Core ROS 2 packages
-sudo apt update
-sudo apt install -y ros-humble-px4-msgs
-
-# Micro XRCE-DDS Agent for PX4-ROS2 communication
-sudo snap install micro-xrce-dds-agent --edge
-```
+- Repository https://github.com/PX4/px4_msgs.git cloned
 
 ### Setup Ciccio Drone Model
+
 Copy the `ciccio_drone` model folder to `PX4-Autopilot/Tools/simulation/gz/models/` containing:
+
 - `model.config`
 - `model.sdf`
 - `/meshes/propeller.dae`
@@ -40,27 +29,17 @@ Register the airframe in CMakeLists.txt by adding `4022_gz_ciccio_drone` to the 
 *Alternatively, use the updated `CMakeLists.txt` file provided in this repository.*
 
 ### Configure DDS Topics
+
 Add ActuatorOutputs message to `PX4-Autopilot/src/modules/uxrce_dds_client/dds_topics.yaml`:
+
 ```yaml
 publications:
   - topic: /fmu/out/actuator_outputs
     type: px4_msgs::msg::ActuatorOutputs
+
 ```
+
 *Alternatively, use the updated `dds_topics.yaml` file provided in this repository.*
-
-### Build the Workspace
-```bash
-cd ~/ros2_ws
-colcon build
-source install/setup.bash
-```
-
-### Initial PX4 Compilation
-```bash
-cd PX4-Autopilot
-make clean
-make px4_sitl gz_ciccio_drone
-```
 
 ## ✅ Usage
 
@@ -69,142 +48,133 @@ make px4_sitl gz_ciccio_drone
 ## **1. Basic Drone Simulation (1.a)**
 
 ### Launch Ciccio Drone Simulation
+
 **Terminal 1** - Start PX4 SITL with Gazebo:
+
 ```bash
 cd PX4-Autopilot
+make clean
 make px4_sitl gz_ciccio_drone
+
 ```
 
 This command compiles PX4 in Software-In-The-Loop (SITL) mode, starts Gazebo Harmonic and loads the ciccio_drone model with all configured plugins and sensors. Once loading is complete, the drone will be ready to receive commands via the PX4 console or external ground stations such as QGroundControl.
 
-To demonstrate the correct implementation of collisions and the correct dynamic behaviour of the drone, we have recorded a demo video: https://www.youtube.com/watch?v=DMF_y9ble9E
+(To demonstrate the correct implementation of collisions and the correct dynamic behaviour of the drone, we have recorded a demo video: https://www.youtube.com/watch?v=DMF_y9ble9E).
 
 ---
 
 ## **2. Actuator Outputs Visualization (1.b)**
 
 ### Launch Sequence
+
 **Terminal 1** - Start drone simulation:
+
 ```bash
 cd PX4-Autopilot
 make px4_sitl gz_ciccio_drone
+
 ```
 
 **Terminal 2** - Start Micro XRCE-DDS bridge for PX4-ROS2 communication:
+
 ```bash
 MicroXRCEAgent udp4 -p 8888
+
 ```
 
 **Terminal 3** - Visualize actuator outputs in real-time:
+
 ```bash
-source ~/ros2_ws/install/setup.bash
+cd home/user/ros2_ws/src
+colcon build
+source install/setup.bash
 ros2 topic echo /fmu/out/actuator_outputs
+
 ```
+
+Then launch the executable file of QGroundControl. Now, to fly the drone in position flight mode, you have two choices: you can set the "commander takeoff" in the first terminal (PX4 terminal) or you can set the takeoff directly in QGroundControl.
+While you drive your drone, you can visualize the actuator outputs in the fourth terminal.
+
+Here is the link to the demo video: https://youtu.be/4mg3Z719B8A
 
 ---
 
-## **3. Force Land Safety System (2.a)**
-
-**ForceLand** is a ROS 2 node that automatically triggers a PX4 UAV landing when the altitude exceeds **20 m**, while **preventing the landing procedure from re-triggering** if the pilot manually intervenes.
-
-The node monitors:
-- `VehicleLocalPosition` → altitude
-- `VehicleLandDetected` → ground contact
-- `ManualControlSetpoint` → throttle input
-
-It publishes landing commands via:
-- `VehicleCommand` (NAV_LAND)
-
-### Purpose of the Modification
-Originally, climbing above 20 m always triggered a landing. If the pilot interrupted the maneuver and climbed again, the system **wrongly reactivated** automatic landing.
-
-**Goal**: Once the pilot intervenes **before landing is complete**, the auto-landing **must not re-trigger**, even if altitude exceeds 20 m again. Reset occurs *only* after PX4 detects `ground_contact == true`.
-
-### Implemented Logic
-
-**✔️ Triggering Condition**
-
-Auto-landing activates only if:
-- altitude_enu > 20 m
-- ready_to_trigger == true
-
-**✔️ Pilot Override**
-
-If the pilot moves the throttle during landing:
-- auto-landing stops
-- cannot restart until real touchdown
-
-**✔️ Ground Contact Reset**
-
-Once `VehicleLandDetected.ground_contact == true`:
-- system resets
-- ready for next cycle
+## **3. Force Land Safety System (2.a-2.b)**
 
 ### Launch Sequence
+
 **Terminal 1** - Start drone simulation:
+
 ```bash
 cd PX4-Autopilot
-make px4_sitl gz_ciccio_drone
+make px4_sitl gz_x500
+
 ```
 
 **Terminal 2** - Start Micro XRCE-DDS bridge:
+
 ```bash
 MicroXRCEAgent udp4 -p 8888
+
 ```
 
+After updating the force_land package with the provided one:
+
 **Terminal 3** - Run ForceLand node:
+
 ```bash
-cd ~/ros2_ws
+cd home/user/ros2_ws/src
 colcon build
 source install/setup.bash
-ros2 run force_land force_land_node
+ros2 run force_land force_land
+
 ```
 
 ### Data Recording for Analysis
-Record necessary signals for plotting:
+
+Even if you can record necessary signals for plotting executing:
+
 ```bash
-ros2 bag record /fmu/out/vehicle_local_position
+ros2 bag record -o fight_data /fmu/out/vehicle_local_position /fmu/out/manual_control_setpoint
+
 ```
 
-### Required Plots
+we provide an already saved bag data file (metadata.yaml).
 
-**1. UAV Altitude (ENU)**
-
-Compute: `altitude_enu = -vehicle_local_position.z`
-
-**2. Manual Throttle Setpoint**
-
-From: `manual_control_setpoint.throttle`
-
-These plots must demonstrate:
-- auto-landing triggers at > 20 m
-- pilot override prevents re-triggering
-- reset occurs only at ground contact
+Here are the links to the demo videos regarding respectively 2a and 2b:  https://youtu.be/Ju3Iz9ULEwI ; https://youtu.be/sBBLaQh54Js and https://youtu.be/B0iTyZc5vtc .
 
 ---
 
 ## **4. Multi-Waypoint Trajectory Planner (3.a)**
 
 ### Execution and Validation Procedure
+
 To verify the planner's functionality, after launching the PX4 simulation environment, execute the following from the `/home/user/ros2_ws/src` folder:
 
 **Terminal 1** - Start drone simulation:
+
 ```bash
 cd PX4-Autopilot
-make px4_sitl gz_ciccio_drone
+make px4_sitl gz_x500
+
 ```
 
 **Terminal 2** - Start Micro XRCE-DDS bridge:
+
 ```bash
 MicroXRCEAgent udp4 -p 8888
+
 ```
 
 **Terminal 3** - Run multi-waypoint planner:
+
 ```bash
-cd ~/ros2_ws/src
+cd home/user/ros2_ws/src
 colcon build --packages-select offboard_rl
 source install/setup.bash
 ros2 run offboard_rl multi_waypoint_planner
+
 ```
 
 Once the node is started, the terminal displays a text menu requesting the input of waypoints in the discussed format. For testing purposes, a sequence of seven waypoints was used (although more could be used), for example:
@@ -219,18 +189,29 @@ Once the node is started, the terminal displays a text menu requesting the input
 0 0 0 0
 done
 5
+
 ```
 
 where the last line indicates a uniform time of 5 seconds for each segment.
 
+Here is the link to the demo video regarding 3b:
+
+- xy: https://youtu.be/B5FcKZlTeLk
+- z: https://youtu.be/eVtOTnoNAOg
+- yaw: https://youtu.be/wGpUq9WT8xA
+- velocity: https://youtu.be/RArwbE9gq5U
+- acceleration: https://youtu.be/_elXurXmuKg
+
 ---
 
 ## 📄 License
+
 Apache-2.0
 
 ---
 
 ## 🔗 References
+
 - [PX4 Autopilot Documentation](https://docs.px4.io/)
 - [PX4 User Guide - SITL Simulation](https://docs.px4.io/main/en/simulation/)
 - [ROS 2 Humble Documentation](https://docs.ros.org/en/humble/)
