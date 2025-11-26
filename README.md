@@ -142,7 +142,7 @@ ros2 bag record -o fight_data /fmu/out/vehicle_local_position /fmu/out/manual_co
 
 we provide an already saved bag data file (metadata.yaml).
 
-Here are the links to the demo videos regarding respectively 2a and 2b:  https://youtu.be/Ju3Iz9ULEwI ; https://youtu.be/sBBLaQh54Js and https://youtu.be/B0iTyZc5vtc .
+Here are the links to the demo videos regarding respectively 2a and 2b:  https://youtu.be/sBBLaQh54Js ; https://youtu.be/Ju3Iz9ULEwI and https://youtu.be/B0iTyZc5vtc .
 
 ---
 
