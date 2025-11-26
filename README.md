@@ -73,14 +73,12 @@ This command compiles PX4 in Software-In-The-Loop (SITL) mode, starts Gazebo Har
 ```bash
 cd PX4-Autopilot
 make px4_sitl gz_ciccio_drone
-
 ```
 
 **Terminal 2** - Start Micro XRCE-DDS bridge for PX4-ROS2 communication:
 
 ```bash
 MicroXRCEAgent udp4 -p 8888
-
 ```
 
 **Terminal 3** - Visualize actuator outputs in real-time:
@@ -90,9 +88,7 @@ cd home/user/ros2_ws/src
 colcon build
 source install/setup.bash
 ros2 topic echo /fmu/out/actuator_outputs
-
 ```
-
 Then launch the executable file of QGroundControl. Now, to fly the drone in position flight mode, you have two choices: you can set the "commander takeoff" in the first terminal (PX4 terminal) or you can set the takeoff directly in QGroundControl.
 While you drive your drone, you can visualize the actuator outputs in the fourth terminal.
 
@@ -109,17 +105,14 @@ Here is the link to the demo video: https://youtu.be/4mg3Z719B8A
 ```bash
 cd PX4-Autopilot
 make px4_sitl gz_x500
-
 ```
 
 **Terminal 2** - Start Micro XRCE-DDS bridge:
 
 ```bash
 MicroXRCEAgent udp4 -p 8888
-
 ```
-
-After updating the force_land package with the provided one:
+After updating the force_land package with the provided one: 
 
 **Terminal 3** - Run ForceLand node:
 
@@ -128,7 +121,6 @@ cd home/user/ros2_ws/src
 colcon build
 source install/setup.bash
 ros2 run force_land force_land
-
 ```
 
 ### Data Recording for Analysis
@@ -137,12 +129,11 @@ Even if you can record necessary signals for plotting executing:
 
 ```bash
 ros2 bag record -o fight_data /fmu/out/vehicle_local_position /fmu/out/manual_control_setpoint
-
 ```
 
 we provide an already saved bag data file (metadata.yaml).
 
-Here are the links to the demo videos regarding respectively 2a and 2b:  https://youtu.be/sBBLaQh54Js ; https://youtu.be/Ju3Iz9ULEwI and https://youtu.be/B0iTyZc5vtc .
+Here are the links to the demo videos regarding respectively 2a and 2b:  https://youtu.be/sBBLaQh54Js; https://youtu.be/Ju3Iz9ULEwI and https://youtu.be/B0iTyZc5vtc .
 
 ---
 
@@ -166,6 +157,7 @@ make px4_sitl gz_x500
 MicroXRCEAgent udp4 -p 8888
 
 ```
+After cloning the offboard_rl folder in /home/user/ros2_ws/src:
 
 **Terminal 3** - Run multi-waypoint planner:
 
